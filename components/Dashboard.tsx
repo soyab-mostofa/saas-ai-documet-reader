@@ -1,8 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import UploadButton from "./UploadButton";
 import { trpc } from "@/app/_trpc/client";
-import { GhostIcon, MessageSquare, Plus, Trash } from "lucide-react";
+import { GhostIcon, Loader2, MessageSquare, Plus, Trash } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
 import Link from "next/link";
 import { format } from "date-fns";
@@ -73,11 +73,18 @@ const Dashboard = () => {
                     mocked
                   </div>
                   <Button
-                    onClick={() => deleteFile({ id: file.id })}
+                    onClick={() => {
+                      setCurrentFile(file.id);
+                      deleteFile({ id: file.id });
+                    }}
                     size={"sm"}
                     className="w-full"
                   >
-                    <Trash className="h-4 w-4" />
+                    {currentFile === file.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Trash className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
               </li>
