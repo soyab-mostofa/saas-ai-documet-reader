@@ -28,6 +28,20 @@ const Dashboard = () => {
     },
   });
 
+  const { mutate: recycleFile } = trpc.recycleFile.useMutation({
+    onSuccess: ({ success }) => {
+      if (success) {
+        utils.getUserFiles.invalidate();
+      }
+    },
+    onMutate: ({ id }) => {
+      setCurrentFile(id);
+    },
+    onSettled: () => {
+      setCurrentFile(null);
+    },
+  });
+
   return (
     <main className="mx-auto max-w-7xl md:p-10">
       <div className="mt-8 flex flex-col items-start justify-between gap-4 border-b border-gray-200 pb-5 sm:flex-row sm:items-center sm:gap-0">
@@ -75,7 +89,7 @@ const Dashboard = () => {
                   <Button
                     onClick={() => {
                       setCurrentFile(file.id);
-                      deleteFile({ id: file.id });
+                      recycleFile({ id: file.id });
                     }}
                     size={"sm"}
                     className="w-full"

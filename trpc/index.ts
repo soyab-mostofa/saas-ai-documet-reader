@@ -6,10 +6,9 @@ import { z } from "zod";
 
 export const appRouter = router({
   authCallback: publicProcedure.query(async () => {
-    const { getUser, isAuthenticated } = getKindeServerSession();
+    const { getUser } = getKindeServerSession();
 
     const user = await getUser();
-    console.log("authCallback", user);
 
     if (!user?.id || !user.email) throw new TRPCError({ code: "UNAUTHORIZED" });
 
@@ -38,9 +37,49 @@ export const appRouter = router({
     return await db.file.findMany({
       where: {
         userId,
+        fileStatus: "LIVE",
       },
     });
   }),
+  getUserFile: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { getUser } = getKindeServerSession();
+      const user = await getUser();
+      const userId = ctx.userId;
+      const fileId = input.id;
+      if (!user?.id || !user.email)
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+
+      const file = await db.file.findFirst({
+        where: {
+          id: fileId,
+          userId,
+        },
+      });
+
+      if (!file) throw new TRPCError({ code: "NOT_FOUND" });
+
+      return file;
+    }),
+  recycleFile: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.userId;
+      const fileId = input.id;
+
+      await db.file.update({
+        where: {
+          id: fileId,
+          userId,
+        },
+        data: {
+          fileStatus: "RECYCLED",
+        },
+      });
+
+      return { success: true };
+    }),
   deleteUserFile: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {

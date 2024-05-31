@@ -5,10 +5,14 @@ import { buttonVariants } from "./ui/button";
 import {
   RegisterLink,
   LoginLink,
+  LogoutLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
 import { ArrowRight } from "lucide-react";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
-const Navbar = () => {
+const Navbar = async () => {
+  const { getUser } = await getKindeServerSession();
+  const user = await getUser();
   return (
     <div className="sticky inset-0 top-0 z-30 h-14 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
       <MaxWidthWrapper>
@@ -17,33 +21,56 @@ const Navbar = () => {
             <span>Quill</span>
           </Link>
           {/* todo: add mobile Navbar */}
+
           <div className="hidden items-center space-x-4 sm:flex">
-            <>
-              <Link
-                className={buttonVariants({
-                  size: "sm",
-                  variant: "ghost",
-                })}
-                href="/pricing"
-              >
-                Pricing
-              </Link>
-              <LoginLink
-                className={buttonVariants({
-                  size: "sm",
-                  variant: "ghost",
-                })}
-              >
-                Sign in
-              </LoginLink>
-              <RegisterLink
-                className={buttonVariants({
-                  size: "sm",
-                })}
-              >
-                Get started <ArrowRight className="ml-1.5 h-5 w-5" />
-              </RegisterLink>
-            </>
+            {user ? (
+              <>
+                <LogoutLink
+                  className={buttonVariants({
+                    size: "sm",
+                    variant: "ghost",
+                  })}
+                >
+                  Logout
+                </LogoutLink>
+                <Link
+                  className={buttonVariants({
+                    size: "sm",
+                    variant: "outline",
+                  })}
+                  href="/deleted"
+                >
+                  Deleted files
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  className={buttonVariants({
+                    size: "sm",
+                    variant: "ghost",
+                  })}
+                  href="/pricing"
+                >
+                  Pricing
+                </Link>
+                <LoginLink
+                  className={buttonVariants({
+                    size: "sm",
+                    variant: "ghost",
+                  })}
+                >
+                  Sign in
+                </LoginLink>
+                <RegisterLink
+                  className={buttonVariants({
+                    size: "sm",
+                  })}
+                >
+                  Get started <ArrowRight className="ml-1.5 h-5 w-5" />
+                </RegisterLink>
+              </>
+            )}
           </div>
         </div>
       </MaxWidthWrapper>

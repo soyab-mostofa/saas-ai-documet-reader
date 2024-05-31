@@ -31,12 +31,18 @@ enum UploadStatus {
   FAILED
 }
 
-model File {
-  id   String @id @default(cuid())
-  name String
+enum FileStatus {
+  RECYCLED
+  SUCCESS
+  LIVE
+}
 
-  url String
-  key String
+model File {
+  id         String     @id @default(cuid())
+  name       String
+  fileStatus FileStatus @default(LIVE)
+  url        String
+  key        String
 
   uploadStaus UploadStatus @default(PENDING)
   createdAt   DateTime     @default(now())

@@ -15,7 +15,6 @@ const Page = () => {
     retryDelay: 500,
   });
 
-
   if (isError) {
     if (error?.data?.code === "UNAUTHORIZED") router.push("/sign-in");
   }
