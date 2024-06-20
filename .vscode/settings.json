@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["clsx", "Kinde", "lucide"]
+  "cSpell.words": ["clsx", "Kinde", "lucide"],
+  "cSpell.customDictionaries": {
+    "custom-dictionary-workspace": {
+      "name": "custom-dictionary-workspace",
+      "path": "${workspaceFolder:sass-platform}/.cspell/custom-dictionary-workspace.txt",
+      "addWords": true,
+      "scope": "workspace"
+    }
+  }
 }

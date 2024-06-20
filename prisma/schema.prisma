@@ -44,9 +44,9 @@ model File {
   url        String
   key        String
 
-  uploadStaus UploadStatus @default(PENDING)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  User        User?        @relation(fields: [userId], references: [id])
-  userId      String?
+  uploadStatus UploadStatus @default(PENDING)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  User         User?        @relation(fields: [userId], references: [id])
+  userId       String?
 }
