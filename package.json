@@ -6,7 +6,8 @@
     "dev": "set \"BROWSER=none\" && start chrome http://localhost:3000 -incognito && next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@kinde-oss/kinde-auth-nextjs": "^2.2.10",
