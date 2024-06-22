@@ -51,32 +51,31 @@ export const appRouter = router({
       if (!user?.id || !user.email)
         throw new TRPCError({ code: "UNAUTHORIZED" });
 
-      const file = await db.file.findFirst({
+      return await db.file.findFirst({
         where: {
           id: fileId,
           userId,
         },
       });
 
-      if (!file) throw new TRPCError({ code: "NOT_FOUND" });
+      // if (!file) throw new TRPCError({ code: "NOT_FOUND" });
 
-      return file;
+      // return file;
     }),
   getFile: protectedProcedure
     .input(z.object({ key: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const { userId } = ctx;
 
-      const file = await db.file.findFirst({
+      return await db.file.findFirst({
         where: {
           key: input.key,
           userId,
         },
       });
 
-      if (!file) throw new TRPCError({ code: "NOT_FOUND" });
-
-      return file;
+      // if (!file) throw new TRPCError({ code: "NOT_FOUND" });
+      // return file;
     }),
   recycleFile: protectedProcedure
     .input(z.object({ id: z.string() }))
